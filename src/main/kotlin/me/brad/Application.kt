@@ -1,32 +1,34 @@
 package me.brad
 
+import me.brad.dao.InventoryDao
+import me.brad.model.InventoryItem
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import me.brad.service.NotificationService
-import me.brad.service.OffersService
-import kotlin.random.Random
+import me.brad.service.OrderService
 
 @SpringBootApplication
-class Application(val offersService: OffersService, val notificationService: NotificationService) : CommandLineRunner{
+class Application(val orderService: OrderService, val inventoryDao: InventoryDao) : CommandLineRunner {
 
     override fun run(vararg args: String?) {
+        // Populating database for demo purposes
+        inventoryDao.save(InventoryItem("apple", 5))
+        inventoryDao.save(InventoryItem("orange", 5))
+
         println("Welcome. Enter an empty line to exit.")
         println("Apples = $0.60, Oranges = $0.25")
 
         print("Enter order (space separated list): ")
         var order = readOrder()
 
-        while ((!order?.get(0)?.isEmpty()!!)) {
-            println("Order total = $${"%.2f".format(offersService.calculateTotal(order))}")
-            notificationService.notifyUser(Random.nextInt(1, 14))
-
+        while (!order!!.containsKey("")) {
+            orderService.makeOrder(order)
             print("Enter order (space separated list): ")
             order = readOrder()
         }
     }
 
-    fun readOrder() = readLine()?.split(" ")?.map { it }
+    fun readOrder() = readLine()?.split(" ")?.map { it }?.groupingBy { it.toLowerCase() }?.eachCount()
 
 }
 

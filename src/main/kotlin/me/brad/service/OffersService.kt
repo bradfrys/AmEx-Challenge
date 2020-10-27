@@ -5,8 +5,7 @@ import org.springframework.stereotype.Service
 @Service
 class OffersService {
 
-    fun calculateTotal(orderList: List<String>): Double {
-        val orderMap = orderList.groupingBy { it.toLowerCase() }.eachCount()
+    fun calculateTotal(orderMap: Map<String, Int>): Double {
         // Apples are buy 1, get 1 free
         // Oranges are buy 2, get 1 free
         return calculateSalePrice(0.6, 0.6, 2, orderMap.getOrDefault("apple", 0)) +

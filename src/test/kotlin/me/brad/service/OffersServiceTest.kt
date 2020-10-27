@@ -9,27 +9,25 @@ class OffersServiceTest {
 
     @Test
     fun shouldIgnoreItemCase() {
-        assertEquals(offersService.calculateTotal(listOf("apple")), 0.6)
-        assertEquals(offersService.calculateTotal(listOf("orange")), 0.25)
-        assertEquals(offersService.calculateTotal(listOf("APPLE")), 0.6)
-        assertEquals(offersService.calculateTotal(listOf("ORANGE")), 0.25)
+        assertEquals(offersService.calculateTotal(mapOf("apple" to 1)), 0.6)
+        assertEquals(offersService.calculateTotal(mapOf("orange" to 1)), 0.25)
     }
 
     @Test
     fun shouldCalculateAppleSalePrice() {
         // Apples are buy 1, get 1 free
-        assertEquals(offersService.calculateTotal(listOf("apple", "apple")), 0.6)
-        assertEquals(offersService.calculateTotal(listOf("apple", "apple", "apple")), 1.2)
-        assertEquals(offersService.calculateTotal(listOf("apple", "apple", "apple", "apple")), 1.2)
+        assertEquals(offersService.calculateTotal(mapOf("apple" to 2)), 0.6)
+        assertEquals(offersService.calculateTotal(mapOf("apple" to 3)), 1.2)
+        assertEquals(offersService.calculateTotal(mapOf("apple" to 4)), 1.2)
     }
 
     @Test
     fun shouldCalculateOrangeSalePrice() {
         // Oranges are 3 for the price of 2
-        assertEquals(offersService.calculateTotal(listOf("orange", "orange", "orange")), 0.5)
-        assertEquals(offersService.calculateTotal(listOf("orange", "orange", "orange", "orange")), 0.75)
-        assertEquals(offersService.calculateTotal(listOf("orange", "orange", "orange", "orange", "orange")), 1.0)
-        assertEquals(offersService.calculateTotal(listOf("orange", "orange", "orange", "orange", "orange", "orange")), 1.0)
+        assertEquals(offersService.calculateTotal(mapOf("orange" to 2)), 0.5)
+        assertEquals(offersService.calculateTotal(mapOf("orange" to 4)), 0.75)
+        assertEquals(offersService.calculateTotal(mapOf("orange" to 5)), 1.0)
+        assertEquals(offersService.calculateTotal(mapOf("orange" to 6)), 1.0)
     }
 
 }

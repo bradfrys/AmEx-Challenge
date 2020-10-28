@@ -6,17 +6,22 @@ import org.springframework.stereotype.Service
 import kotlin.random.Random
 
 @Service
-class OrderService(val offersService: OffersService, val notificationService: NotificationService, val inventoryDao: InventoryDao) {
+class OrderService(val offersService: OffersService, val inventoryDao: InventoryDao, val kafkaMessageService: KafkaMessageService) {
 
     fun makeOrder(order: Map<String, Int>) {
-        val allItemsInStock = order.all { orderItem -> orderItem.value <= inventoryDao.getOne(orderItem.key).itemCount }
+        kafkaMessageService.publishOrderReceived()
+
+        // return true if all orderItems are present in the database AND are stocked for the purchase
+        val allItemsInStock = order.all { orderItem ->
+            inventoryDao.existsById(orderItem.key) && orderItem.value <= inventoryDao.getOne(orderItem.key).itemCount
+        }
 
         if (allItemsInStock) {
             println("Order total = $${"%.2f".format(offersService.calculateTotal(order))}")
             order.forEach { orderItem -> decrementInventoryCount(orderItem.key, orderItem.value) }
-            notificationService.notifyUserOfSuccess(Random.nextInt(1, 14))
+            kafkaMessageService.publishOrderSuccess(Random.nextInt(1, 14))
         } else {
-            notificationService.notifyUserOfFailure()
+            kafkaMessageService.publishOrderFailure()
         }
     }
 

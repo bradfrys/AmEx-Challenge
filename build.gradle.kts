@@ -15,11 +15,15 @@ repositories { mavenCentral() }
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
+    implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.kafka:spring-kafka")
+    implementation("org.apache.kafka:kafka-clients")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("com.h2database:h2")
 
     testImplementation(kotlin("test-junit"))
+    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 

@@ -12,6 +12,11 @@ class OffersService {
                 calculateSalePrice(0.25, 0.5, 3, orderMap.getOrDefault("orange", 0))
     }
 
+    /**
+     * This function is a general equation for "buy x, get 1 free".
+     * Integer division is used to find the price of all sale items,
+     * and modulus is used to find the price of the remaining items.
+     */
     private fun calculateSalePrice(unitPrice: Double, salePrice: Double, saleQuantity: Int, purchaseQuantity: Int): Double
             = ((purchaseQuantity / saleQuantity) * salePrice) + ((purchaseQuantity % saleQuantity) * unitPrice)
 

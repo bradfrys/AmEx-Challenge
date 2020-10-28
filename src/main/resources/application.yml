@@ -1,0 +1,10 @@
+spring.profiles.active: command
+
+kafka:
+  producer:
+    bootstrap: localhost:9092
+    topic: order-submitted # Default topic
+  consumer:
+    bootstrap: localhost:9092
+    group: AmEx
+    topic: order-submitted # Default topic
